@@ -51,7 +51,7 @@ CORS_ALLOWED_ORIGIN=[
 # Application definition
 
 
-
+AUTH_USER_MODEL='account.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
