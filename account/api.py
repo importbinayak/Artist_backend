@@ -30,9 +30,14 @@ def signup(request):
 
     if form.is_valid():
         form.save()
+        return JsonResponse({
+            'message': 'success',
+            'errors': {}
+        })
     else:
         message='error'
 
     return JsonResponse({
         'message': message,
-    })
+        'errors': form.errors
+    },status=400)
