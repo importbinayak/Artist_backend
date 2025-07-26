@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 from account.models import User
+from django.utils import timezone
+from django.utils.timesince import timesince
 
 
 # Create your models here.
@@ -26,3 +28,9 @@ class Post(models.Model):
     
     class Meta:
         ordering=("-created_at",)
+    
+    @property
+    def created_at_min(self):
+        if self.created_at:
+            return timesince(self.created_at,timezone.now()) + " ago"
+        return "Just now"
