@@ -8,6 +8,13 @@ from .forms import PostForm
 
 # Create your views here.
 
+def post_list_profile(request,id):
+    posts=Post.objects.all()
+    serializer=PostSerializer(posts,many=True)
+    return JsonResponse(serializer.data,safe=True)
+    
+
+
 @api_view(['GET'])
 def post_list(request):
     posts=Post.objects.all()
