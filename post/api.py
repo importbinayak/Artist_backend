@@ -15,12 +15,12 @@ def post_list_profile(request,id):
     
     posts=Post.objects.filter(created_by_id=id)
     
-    user_serializer=UserSerializer(User)
+    user_serializer=UserSerializer(user)
     post_serializer=PostSerializer(posts,many=True)
     return JsonResponse(
         {
             'posts':post_serializer.data,
-            'users':user_serializer.data
+            'user':user_serializer.data
             }
         ,safe=False)
     
