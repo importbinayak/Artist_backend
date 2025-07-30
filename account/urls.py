@@ -10,6 +10,11 @@ urlpatterns = [
     
     
     path('signup/',signup,name="signup"),
-    path('me/',me,name="me")
+    path('me/',me,name="me"),
+    
+    
+    path('friends/<uuid:pk>/',friends,name='friends'),
+    path('friends/<uuid:pk>/request/',send_friendship_request,name='send_friendship_request'),
+    path('friends/<uuid:pk>/<str:status>/',handle_request,name='handle_request')
     
 ]
