@@ -50,8 +50,15 @@ def friends(request,pk):
     user=User.objects.get(pk=pk)
     requests=[]
     
+    # u=request.user
+    # u.friends_count=1
+    # u.save()
+    
+    # user.friends_count=1
+    # user.save()
+    
     if user == request.user:
-        requests=FriendshipRequest.objects.filter(created_for=request.user)
+        requests=FriendshipRequest.objects.filter(created_for=request.user,status=FriendshipRequest.SENT)
         requests=FriendshipSerializer(requests,many=True)
         requests=requests.data
     
@@ -66,10 +73,23 @@ def friends(request,pk):
 @api_view(['POST'])
 def send_friendship_request(request,pk):
     user=User.objects.get(pk=pk)
-    friend_request=FriendshipRequest.objects.create(created_for=user,created_by=request.user)
+    #malai request pathako xa?
+    check1=FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
+    #maile request pathako xu?
+    check2=FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
+#     from django.db.models import Q
+
+# check = FriendshipRequest.objects.filter(
+#     Q(created_for=request.user, created_by=user) |
+#     Q(created_for=user, created_by=request.user)
+# )
     
+    if not check1 or not check2:
+        friend_request=FriendshipRequest.objects.create(created_for=user,created_by=request.user)
+        return JsonResponse({'message':'Friend request send successful'})
     # print('send_friend_request',pk)
-    return JsonResponse({'message':'Friend request send successful'})
+    else:
+        return JsonResponse({'message':'Friend request sent already'})
 
 
 @api_view(['POST'])
@@ -78,6 +98,14 @@ def handle_request(request,pk,status):
     friendship_request=FriendshipRequest.objects.filter(created_for=request.user).get(created_by=user)
     friendship_request.status=status
     friendship_request.save()
+    
+    user.friends.add(request.user)
+    user.friends_count = user.friends_count+1
+    user.save()
+    
+    request_user=request.user
+    request_user.friends_count = request_user.friends_count +1
+    request_user.save()
     
     return JsonResponse({
         'message':'friend request updated'
