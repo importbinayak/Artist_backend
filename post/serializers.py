@@ -8,4 +8,4 @@ class PostSerializer(serializers.ModelSerializer):
     created_at_min=serializers.ReadOnlyField()
     class Meta:
         model=Post
-        fields=['id','body','created_by','created_at','created_at_min']
+        fields=['id','body','likes_count','created_by','created_at','created_at_min']
