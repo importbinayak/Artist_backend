@@ -72,3 +72,12 @@ def post_like(request,pk):
         return JsonResponse({
             'message':'already liked'
         })
+
+
+@api_view(['GET'])
+def post_details(request,pk):
+    post=Post.objects.get(pk=pk)
+    
+    return JsonResponse({
+        'post':PostSerializer(post).data
+    })
